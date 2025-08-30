@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+/* Define variables for LIGHT mode (the new gradient theme) */
+:root {
+  --background: transparent; /* Background is now a gradient */
+  --foreground: #ededed; /* Light text for readability on the gradient */
+  --card: rgba(255, 255, 255, 0.05); /* Frosted glass effect */
+  --primary: #22c55e; /* green-500 */
+  --primary-hover: #16a34a; /* green-600 */
+  --primary-light: #4ade80; /* green-400 - for the avatar gradient */
+  --secondary: #A0A0A0; /* Lighter secondary text */
+  --gradient-from: #374151; /* gray-700 */
+}
+
+/* Define variables for DARK mode using the .dark class selector */
+.dark:root {
+  --background: #1A1A1A;
+  --foreground: #E0E0E0;
+  --card: #2B2B2B;
+  --primary: #8BC34A; /* Original green for dark mode */
+  --primary-hover: #7CB342;
+  --primary-light: #9CCC65;
+  --secondary: #A0A0A0;
+}
+
+/* Apply the base theme to the body */
+body {
+  color: var(--foreground);
+  /* The gradient is the default (light theme) background */
+  background-color: var(--gradient-from); /* Fallback color */
+  background-image: linear-gradient(to bottom right, var(--gradient-from), var(--primary));
+  min-height: 100vh;
+}
+
+/* When dark mode is active, remove the gradient and use a solid background */
+.dark body {
+  background-image: none;
+  background-color: var(--background);
+}
+
+/* Custom styles for recharts text elements to handle theme changes */
+.recharts-text, .recharts-cartesian-axis-tick-value {
+  fill: var(--secondary);
+}
+
