@@ -43,7 +43,7 @@ export default function DashboardPage() {
           </div>
         </div>
         <div className="mb-8">
-                  <ConnectedDevicesCard />
+         <ConnectedDevicesCard />
         </div>
         
         {/* --- FIX APPLIED HERE --- */}
