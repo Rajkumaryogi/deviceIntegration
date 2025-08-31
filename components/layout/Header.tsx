@@ -1,15 +1,18 @@
-// components/layout/Header.tsx
-'use client';
+// src/components/layout/Header.tsx
+'use client'; 
+
+import React from 'react';
 import { mockPatient } from '@/data/mockData';
 import { FiSettings, FiBell } from 'react-icons/fi';
 import { ThemeToggleButton } from './ThemeToggleButton';
 
 export function Header() {
   return (
-    <header className="flex justify-between items-center mb-8">
+    // The new header has a bottom border for a clean separation
+    <header className="flex justify-between items-center mb-8 border-b border-secondary/20 pb-4">
       {/* Left Side: Logo and Brand Name */}
       <div className="flex items-center gap-3">
-        {/* Simple SVG logo - the 'currentColor' makes it adapt to themes */}
+        {/* Simple SVG logo - 'currentColor' makes it adapt to themes */}
         <svg
           width="32"
           height="32"
@@ -29,7 +32,7 @@ export function Header() {
         <span className="font-bold text-2xl text-foreground">Vitals7</span>
       </div>
 
-      {/* Right Side: Icons and User Avatar */}
+      {/* Right Side: Icons and User Avatar are grouped together */}
       <div className="flex items-center gap-2 md:gap-4">
         <ThemeToggleButton />
         <button className="p-2.5 rounded-full hover:bg-card transition-colors" aria-label="Notifications">
@@ -38,7 +41,6 @@ export function Header() {
         <button className="p-2.5 rounded-full hover:bg-card transition-colors" aria-label="Settings">
           <FiSettings size={22} className="text-secondary" />
         </button>
-        
       </div>
     </header>
   );

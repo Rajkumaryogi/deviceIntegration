@@ -28,7 +28,7 @@ body {
   color: var(--foreground);
   /* The gradient is the default (light theme) background */
   background-color: var(--gradient-from); /* Fallback color */
-  background-image: linear-gradient(to bottom right, var(--gradient-from), var(--primary));
+  background-image: linear-gradient(to right left, var(--gradient-from), var(--primary));
   min-height: 100vh;
 }
 

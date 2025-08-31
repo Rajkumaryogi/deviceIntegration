@@ -18,7 +18,7 @@ export function MainLineChart({ data }: MainLineChartProps) {
     <div className="w-full h-[350px]">
       <ResponsiveContainer>
         <LineChart data={data} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-          <CartesianGrid stroke="var(--secondary)" strokeOpacity={0.3} strokeDasharray="3 3" />
+          <CartesianGrid stroke="var(--secondary)" strokeOpacity={0.5} strokeDasharray="3 3" />
           <XAxis dataKey="effective_date_time" tickFormatter={formatDate} stroke="var(--secondary)" />
           <YAxis stroke="var(--secondary)" />
           <Tooltip

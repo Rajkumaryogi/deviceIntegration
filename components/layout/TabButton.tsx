@@ -1,4 +1,6 @@
-// components/layout/TabButton.tsx
+// src/components/layout/TabButton.tsx
+'use client';
+
 import React from 'react';
 
 interface TabButtonProps {
@@ -8,14 +10,20 @@ interface TabButtonProps {
 }
 
 export function TabButton({ label, isActive, onClick }: TabButtonProps) {
+  // --- STYLING UPDATES APPLIED HERE ---
+  const baseStyles = 'px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ease-in-out';
+  
+  const activeStyles = 'bg-primary text-white shadow-lg shadow-primary/30 border';
+  
+  const inactiveStyles = 'bg-transparent text-secondary hover:bg-card/60';
+
   return (
     <button
       onClick={onClick}
-      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
-        isActive ? 'bg-primary text-white' : 'bg-background text-secondary hover:brightness-95 dark:hover:brightness-125'
-      }`}
+      className={`${baseStyles} ${isActive ? activeStyles : inactiveStyles}`}
     >
       {label}
     </button>
   );
 }
+
