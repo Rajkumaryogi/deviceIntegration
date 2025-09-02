@@ -1,7 +1,6 @@
 // src/app/page.tsx
 'use client';
 
-// --- NEW --- We need useState and useEffect for data fetching
 import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { SummaryCard } from '@/components/dashboard/SummaryCard';
@@ -13,13 +12,16 @@ import { Card } from '@/components/ui/Card';
 import { MainLineChart } from '@/components/dashboard/MainLineChart';
 import { ChartToggleButton } from '@/components/dashboard/ChartToggleButton';
 import { ConnectedDevicesCard } from '@/components/dashboard/ConnectedDevicesCard';
-import { Observation, Patient } from '@/types'; // Import your types
+import { Observation } from '@/types'; // removed unused Patient import
+import {  Device } from '@/types'; // add Device
 
-// --- NEW --- Define a type for our dashboard data
+
+
+// Define a type for our dashboard data
 interface DashboardData {
   patient: {
     first_name: string;
-    connected_devices: any[];
+    connected_devices: Device[]; // avoid any
   };
   latestObservations: {
     [key: string]: Observation | null;
@@ -27,16 +29,14 @@ interface DashboardData {
 }
 
 export default function DashboardPage() {
-  // --- NEW --- State for data, loading, and errors
   const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   const [chartDataType, setChartDataType] = useState<'blood-glucose' | 'steps'>('blood-glucose');
-  // Chart data will be populated from the API later if needed, starting empty.
   const [chartData, setChartData] = useState<Observation[]>([]);
-  
-  // This effect fetches all data when the component mounts
+
+  // Fetch dashboard data
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
@@ -46,47 +46,48 @@ export default function DashboardPage() {
         }
         const apiData: DashboardData = await response.json();
         setData(apiData);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unexpected error occurred');
+        }
       } finally {
         setIsLoading(false);
       }
     };
     fetchDashboardData();
-  }, []); // Empty array means this runs once on mount
+  }, []);
 
-  // This effect fetches the chart data when the toggle button is clicked
+  // Fetch chart data
   useEffect(() => {
     const fetchChartData = async () => {
       try {
         const response = await fetch(`/api/observations/${chartDataType}`);
         if (!response.ok) throw new Error('Failed to fetch chart data');
-        const chartApiData = await response.json();
+        const chartApiData: Observation[] = await response.json();
         setChartData(chartApiData.reverse());
-      } catch (err) {
-        // Handle chart-specific error if necessary
+      } catch {
+        // Chart-specific error handling can go here
       }
     };
     fetchChartData();
   }, [chartDataType]);
 
-  const currentDate = format(new Date(), "eeee, d MMMM");
-  
-  // --- RENDER A LOADING STATE ---
+  const currentDate = format(new Date(), 'eeee, d MMMM');
+
   if (isLoading) {
     return <div className="text-center text-secondary">Loading Dashboard...</div>;
   }
 
-  // --- RENDER AN ERROR STATE ---
   if (error) {
     return <div className="text-center text-red-500">Error: {error}</div>;
   }
 
-  // --- RENDER THE DATA-DRIVEN UI ---
   return (
     <>
       <Header />
-      
+
       <main>
         <div className="flex items-center gap-4 mb-8">
           <div className="w-16 h-16 bg-gradient-to-tr from-primary-light to-primary rounded-full flex-shrink-0 flex items-center justify-center font-bold text-2xl text-white shadow-lg border-2">
@@ -101,45 +102,44 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
-          <SummaryCard 
-            title="Steps" 
-            value={`${data?.latestObservations.steps?.value || 0}`} 
+          <SummaryCard
+            title="Steps"
+            value={`${data?.latestObservations.steps?.value || 0}`}
             icon={<FaWalking />}
             colorClass="text-green-400"
             dataType="steps"
           />
-          <SummaryCard 
-            title="Heart Rate" 
-            value={`${data?.latestObservations['heart-rate']?.value || 0} bpm`} 
+          <SummaryCard
+            title="Heart Rate"
+            value={`${data?.latestObservations['heart-rate']?.value || 0} bpm`}
             icon={<FaHeartbeat />}
             colorClass="text-red-400"
             dataType="heart-rate"
           />
-          <SummaryCard 
-            title="Sleep" 
-            value={`${data?.latestObservations.sleep?.value || 0} hrs`} 
+          <SummaryCard
+            title="Sleep"
+            value={`${data?.latestObservations.sleep?.value || 0} hrs`}
             icon={<IoBed />}
             colorClass="text-purple-400"
             dataType="sleep"
           />
-          <SummaryCard 
-            title="Blood Glucose" 
-            value={`${data?.latestObservations['blood-glucose']?.value || 0} mg/dL`} 
+          <SummaryCard
+            title="Blood Glucose"
+            value={`${data?.latestObservations['blood-glucose']?.value || 0} mg/dL`}
             icon={<GiMedicalDrip />}
             colorClass="text-blue-400"
             dataType="blood-glucose"
           />
-          <SummaryCard 
-            title="Calories" 
-            value="1,200 Kcal" // This can be made dynamic later
-            icon={<FaFire />} 
+          <SummaryCard
+            title="Calories"
+            value="1,200 Kcal" // placeholder
+            icon={<FaFire />}
             colorClass="text-orange-400"
             dataType="calories"
           />
         </div>
 
         <div className="space-y-8">
-          {/* --- PASS LIVE DATA TO THE COMPONENT --- */}
           <ConnectedDevicesCard connectedDevices={data?.patient.connected_devices || []} />
           <Card>
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
@@ -164,4 +164,3 @@ export default function DashboardPage() {
     </>
   );
 }
-
