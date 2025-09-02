@@ -1,4 +1,4 @@
-// src/components/ui/Modal.tsx
+// app/components/ui/Modal.tsx
 'use client';
 
 import { FiX } from 'react-icons/fi';

@@ -1,4 +1,4 @@
-// src/components/dashboard/SummaryCard.tsx
+// app/components/dashboard/SummaryCard.tsx
 import React from 'react';
 import { Card } from '@/components/ui/Card';
 import Link from 'next/link'; // Import the Link component
