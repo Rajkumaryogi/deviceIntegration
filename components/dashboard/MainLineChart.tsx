@@ -30,7 +30,7 @@ export function MainLineChart({ data }: MainLineChartProps) {
             formatter={(value) => [`${value} ${getUnit()}`, 'Value']}
           />
           <Legend wrapperStyle={{ color: 'var(--foreground)' }} />
-          <Line type="monotone" dataKey="value" stroke="var(--primary)" strokeWidth={2} activeDot={{ r: 8 }} />
+          <Line type="monotone" dataKey="value" stroke="var(--secondary)" strokeWidth={2} activeDot={{ r: 8 }} />
         </LineChart>
       </ResponsiveContainer>
     </div>
